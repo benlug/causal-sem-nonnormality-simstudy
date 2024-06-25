@@ -9,3 +9,26 @@ This repository contains the code for a simulation study investigating the effec
 * Evaluation of estimator performance under various degrees of non-normality
 
 ### Structure
+
+```
+├───study_1
+│   ├───main
+│   │   └───functions
+│   └───margins
+│       └───functions
+├───study_2
+│   ├───main
+│   │   └───functions
+│   └───margins
+│       └───functions
+├───study_path_A
+│   ├───main
+│   │   └───functions
+│   └───margins
+│       └───functions
+└───study_path_B
+    ├───main
+    │   └───functions
+    └───margins
+        └───functions
+```
