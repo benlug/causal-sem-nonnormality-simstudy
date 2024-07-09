@@ -13,24 +13,16 @@ generate_data <- function(n, mean_y, mean_z, Sigma,
   }
   marginal_distrs$y$mean <- mean_y
   
-  # Total number of variables
-  total_vars <- num_z_vars + 1
-  
   # Pair Copula Specifications for a D-vine structure
-  pcs <- vector("list", total_vars - 1)
-  for (i in 1:(total_vars - 1)) {
-    pcs[[i]] <- vector("list", total_vars - i)
-    for (j in 1:(total_vars - i)) {
-      if (i == 1 && j <= num_z_vars) {
-        pcs[[i]][[j]] <- bicop_dist(as.character(copula_type_ZY))
-      } else {
-        pcs[[i]][[j]] <- bicop_dist("gaussian")
-      }
-    }
-  }
+  pcs <- list(
+    list(bicop_dist(as.character(copula_type_ZY)), bicop_dist(as.character(copula_type_ZY)), bicop_dist("gaussian")),
+    list(bicop_dist(as.character(copula_type_ZY)), bicop_dist("gaussian")),
+    list(bicop_dist("gaussian"))
+  )
   
   # Vine Structure
-  vine_structure <- dvine_structure(total_vars)
+  # Assuming a D-vine structure for simplicity
+  vine_structure <- dvine_structure(1:4) # For 4 variables (z1, z2, z3, y)
   
   # Create Vine Copula Distribution
   vine_cop <- vinecop_dist(pcs, structure = vine_structure)
@@ -39,11 +31,15 @@ generate_data <- function(n, mean_y, mean_z, Sigma,
   calib <- vita(margins = marginal_distrs, 
                 sigma.target = Sigma, 
                 vc = vine_cop,
+                # family_set = copula_type_ZY,
                 cores = 1,
                 Nmax = Nmax)
+
   sample <- rvine(n, vine = calib)
   colnames(sample) <- names(marginal_distrs)
   sample <- as_tibble(sample)
   
   return(list(sample, calib))
 }
+
+

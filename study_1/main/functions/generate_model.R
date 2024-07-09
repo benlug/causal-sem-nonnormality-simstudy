@@ -1,4 +1,8 @@
 generate_model <- function(beta_z, load_z) {
+
+  if (!is.numeric(beta_z) || !is.numeric(load_z)) {
+    stop("Input parameters must be numeric!")
+  }
   
   # Define the SEM model specification
   model <- '
